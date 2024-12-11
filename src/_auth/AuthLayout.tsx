@@ -8,14 +8,16 @@ const AuthLayout = () => {
       {isAuthenticate ? (
         <Navigate to="/" />
       ) : (
-        <section className=" max-w-11/12 w-full h-screen flex justify-center items-center">
+        <section className="max-w-11/12 mx-auto  h-screen flex justify-center items-end relative">
           <img
             src="/assets/images/signupImage.svg"
             alt="Background"
-            className="absolute inset-0 w-full h-full object-fill sm:top-[200px] z-0"
+            className="absolute inset-0 w-full h-full object-cover p-1 md:p-0 md:object-fill z-0"
           />
-          <div className="relative z-10 flex justify-center items-center h-full">
+          <div className="relative z-10 w-full flex justify-center items-end">
+            {/* <div className="w-full flex justify-center items-center"> */}
             <Outlet />
+            {/* </div> */}
           </div>
         </section>
       )}
