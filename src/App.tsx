@@ -4,7 +4,7 @@ import "./index.css";
 import AuthLayout from "./_auth/AuthLayout";
 import Signup from "./_auth/register/Signup";
 import RootLayout from "./_root/RootLayout";
-import { Home } from "./_root/pages/index";
+import { Home, CreatePost, Profile, PreviewPost } from "./_root/pages/index";
 
 function App() {
   return (
@@ -17,6 +17,10 @@ function App() {
         {/* private routes */}
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/preview-post" element={<PreviewPost />} />
         </Route>
       </Routes>
       <Toaster />

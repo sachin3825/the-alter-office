@@ -3,7 +3,7 @@ export type IContextType = {
   isLoading: boolean;
   setUser: React.Dispatch<React.SetStateAction<IUser>>;
   isAuthenticated: boolean;
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<IUser>>;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
 };
 
@@ -22,11 +22,16 @@ export type IUpdateUser = {
   file: File[];
 };
 
+export enum FileType {
+  IMAGE = "image",
+  VIDEO = "video",
+}
+
 export type INewPost = {
   userId: string;
   caption: string;
   file: File[];
-  location?: string;
+  type: FileType;
   tags?: string;
 };
 

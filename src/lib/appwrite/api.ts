@@ -1,10 +1,11 @@
-import { INewUser } from "@/types";
+import { INewPost } from "@/types";
 import {
   account,
   appwriteConfig,
   avatars,
   databases,
   OAuthProvider,
+  storage,
 } from "./config";
 import { ID, Query } from "appwrite";
 
@@ -108,5 +109,31 @@ export async function saveUserToDB(user: {
   } catch (error) {
     console.log(error);
     return error;
+  }
+}
+
+export async function uploadFile(files: File | File[]) {
+  try {
+    // Convert single file to an array for unified handling
+    const fileArray = Array.isArray(files) ? files : [files];
+
+    const uploadPromises = fileArray.map((file) =>
+      storage.createFile(appwriteConfig.storageId, ID.unique(), file)
+    );
+
+    const uploadedFiles = await Promise.all(uploadPromises);
+
+    return uploadedFiles;
+  } catch (error) {
+    console.error("Error uploading file(s):", error);
+    throw error;
+  }
+}
+
+export async function(post: INewPost) {
+  try{
+    
+  } catch (error){
+    
   }
 }

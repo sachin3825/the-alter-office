@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getUser, checkUserInDB } from "@/lib/appwrite/api";
 import { toast } from "@/hooks/use-toast";
 import { useCreateUserAccountMutation } from "@/lib/react-query/queriesAndMutation";
+import { useUserContext } from "@/context/AuthContext";
+import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
-  const { mutateAsync: createUserAccount, isLoading: isUserCreated } =
+  const { user } = useUserContext();
+  const { mutateAsync: createUserAccount, isPending } =
     useCreateUserAccountMutation();
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initializeUser = async () => {
@@ -16,8 +16,6 @@ const RootLayout = () => {
         const loggedInUser = await getUser();
 
         if (loggedInUser) {
-          setUser(loggedInUser);
-
           const userExists = await checkUserInDB(loggedInUser.email);
 
           if (userExists === 0) {
@@ -26,30 +24,19 @@ const RootLayout = () => {
         }
       } catch (err) {
         console.error("Error initializing user:", err);
-        setError("Failed to initialize user.");
+
         toast({ title: "signup failed please try again" });
-      } finally {
-        setLoading(false);
       }
     };
 
     initializeUser();
-  }, []);
+  }, [user]);
 
-  if (loading) {
+  if (isPending) {
     return <p>Loading...</p>;
   }
 
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
-
-  return (
-    <div>
-      <h1>Welcome, {user?.name || user?.email}!</h1>
-      <p>Root Layout Content Goes Here</p>
-    </div>
-  );
+  return <Outlet />;
 };
 
 export default RootLayout;
