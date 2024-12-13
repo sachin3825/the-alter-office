@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
+import { Toaster } from "@/components/ui/toaster";
 import "./index.css";
 import AuthLayout from "./_auth/AuthLayout";
 import Signup from "./_auth/register/Signup";
@@ -19,6 +19,7 @@ function App() {
           <Route index element={<Home />} />
         </Route>
       </Routes>
+      <Toaster />
     </main>
   );
 }

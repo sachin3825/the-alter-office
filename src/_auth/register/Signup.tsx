@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FaGoogle } from "react-icons/fa";
+import { loginWithGoogle, logoutUser } from "@/lib/appwrite/api";
 
 const Signup = () => {
   return (
@@ -9,10 +10,11 @@ const Signup = () => {
         <h1 className="text-2xl">Vibesnap</h1>
       </div>
       <p>Moments That Matter, Shared Forever.</p>
-      <Button>
+      <Button onClick={loginWithGoogle}>
         <FaGoogle />
         Continue with Google
       </Button>
+      <Button onClick={logoutUser}>Logout</Button>
     </div>
   );
 };
