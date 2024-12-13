@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { getUser, checkUserInDB, createUserAccount } from "@/lib/appwrite/api";
+import { getUser, checkUserInDB } from "@/lib/appwrite/api";
 import { toast } from "@/hooks/use-toast";
+import { useCreateUserAccountMutation } from "@/lib/react-query/queriesAndMutation";
 
 const RootLayout = () => {
+  const { mutateAsync: createUserAccount, isLoading: isUserCreated } =
+    useCreateUserAccountMutation();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
