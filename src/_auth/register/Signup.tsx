@@ -14,7 +14,9 @@ const Signup = () => {
         <FaGoogle />
         Continue with Google
       </Button>
-      <Button onClick={logoutUser}>Logout</Button>
+      {/* <Button onClick={logoutUser} className="dark">
+        Logout
+      </Button> */}
     </div>
   );
 };
