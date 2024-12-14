@@ -5,14 +5,15 @@ import { Link } from "react-router-dom";
 import { multiFormatDateString } from "@/lib/utils";
 import { SliderType } from "@/types";
 import ImageSlider from "./ImageSlider";
-
+import PostStats from "./PostStats";
+import { useUserContext } from "@/context/AuthContext";
 type PostCardProp = {
   post: Models.Document;
 };
 
 const PostCard = ({ post }: PostCardProp) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-
+  const { user } = useUserContext();
   useEffect(() => {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
@@ -82,6 +83,7 @@ const PostCard = ({ post }: PostCardProp) => {
           </video>
         )}
       </Link>
+      <PostStats post={post} userId={user.id} />
     </Card>
   );
 };
