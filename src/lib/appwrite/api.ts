@@ -1,4 +1,5 @@
-import { INewPost } from "@/types";
+import { INewPost, FileType } from "@/types";
+import type { ImageGravity } from "appwrite";
 import {
   account,
   appwriteConfig,
@@ -117,9 +118,13 @@ export async function uploadFile(files: File | File[]) {
     // Convert single file to an array for unified handling
     const fileArray = Array.isArray(files) ? files : [files];
 
-    const uploadPromises = fileArray.map((file) =>
-      storage.createFile(appwriteConfig.storageId, ID.unique(), file)
-    );
+    const uploadPromises = fileArray.map((file) => {
+      // Check and log the MIME type
+      console.log("Uploading file with MIME type:", file.type);
+
+      // Ensure correct MIME type handling (especially for video files)
+      return storage.createFile(appwriteConfig.storageId, ID.unique(), file);
+    });
 
     const uploadedFiles = await Promise.all(uploadPromises);
 
@@ -130,10 +135,102 @@ export async function uploadFile(files: File | File[]) {
   }
 }
 
-export async function(post: INewPost) {
-  try{
-    
-  } catch (error){
-    
+export async function createPost(post: INewPost) {
+  try {
+    // Determine if post contains a video
+    const isVideo = post.type === FileType.VIDEO;
+
+    const uploadedFiles = await uploadFile(post.file);
+    if (!uploadedFiles) throw Error("File upload failed");
+
+    // Generate file URLs after upload
+    const fileUrls = await Promise.all(
+      uploadedFiles.map((file) => getFilePreview(file.$id, isVideo))
+    );
+
+    // If any file URL generation fails, clean up uploaded files and throw error
+    if (fileUrls.includes(undefined)) {
+      await Promise.all(uploadedFiles.map((file) => deleteFile(file.$id)));
+      throw Error("Failed to generate file previews");
+    }
+
+    // Convert tags into an array
+    const tags = post.tags?.replace(/ /g, "").split(",") || [];
+
+    // Prepare the post payload based on file type
+    const postPayload: any = {
+      creator: post.userId,
+      caption: post.caption,
+      tags: tags,
+      Type: post.type,
+    };
+
+    if (isVideo) {
+      // For video posts, use the video URL
+      postPayload["VideoUrl"] = fileUrls[0]; // Assuming one video file
+    } else {
+      // For image posts, use the image URLs
+      postPayload["imageUrl"] = fileUrls; // Multiple image URLs
+    }
+
+    // Save post to the database
+    const newPost = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      ID.unique(),
+      postPayload
+    );
+
+    if (!newPost) {
+      await Promise.all(uploadedFiles.map((file) => deleteFile(file.$id)));
+      throw Error("Failed to create post in DB");
+    }
+
+    return newPost;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
   }
+}
+
+export function getFilePreview(fileId: string, isVideo: boolean) {
+  try {
+    if (isVideo) {
+      // Use the getFileView method to get the video URL
+      return storage.getFileView(appwriteConfig.storageId, fileId);
+    } else {
+      // Generate preview for image files
+      return storage.getFilePreview(
+        appwriteConfig.storageId,
+        fileId,
+        2000,
+        2000,
+        "top" as ImageGravity,
+        100
+      ); // This gives you an image preview URL
+    }
+  } catch (error) {
+    console.log("Error generating file preview or view:", error);
+  }
+}
+
+export async function deleteFile(fileId: string) {
+  try {
+    await storage.deleteFile(appwriteConfig.storageId, fileId);
+    return { status: "ok" };
+  } catch (error) {
+    console.error("Error deleting file:", error);
+  }
+}
+
+export async function getRecentPosts() {
+  const posts = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.postCollectionId,
+    [Query.orderDesc(`$createdAt`), Query.limit(20)]
+  );
+
+  if (!posts) throw Error;
+
+  return posts;
 }

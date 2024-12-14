@@ -59,3 +59,8 @@ export type INewUser = {
   email: string;
   username: string;
 };
+
+export enum SliderType {
+  Preview = "preview",
+  Post = "post",
+}
