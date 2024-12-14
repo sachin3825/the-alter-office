@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FaGoogle } from "react-icons/fa";
-import { loginWithGoogle, logoutUser } from "@/lib/appwrite/api";
+import { loginWithGoogle } from "@/lib/appwrite/api";
 
 const Signup = () => {
   return (
