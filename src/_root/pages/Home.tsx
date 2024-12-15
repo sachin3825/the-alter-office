@@ -25,7 +25,7 @@ const Home = () => {
           width={50}
           height={50}
           className="rounded-full cursor-pointer"
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate(`/profile/${user.id}`)}
         />
         <div>
           <small className="text-gray-500">Welcome Back</small>

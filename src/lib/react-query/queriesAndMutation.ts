@@ -8,6 +8,7 @@ import {
   createPost,
   createUserAccount,
   getRecentPosts,
+  getUserById,
   likePost,
 } from "../appwrite/api";
 import { INewPost } from "@/types";
@@ -62,5 +63,13 @@ export const useLikePost = () => {
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
     },
+  });
+};
+
+export const useGetUserById = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
   });
 };

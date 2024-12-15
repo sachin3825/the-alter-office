@@ -65,7 +65,7 @@ const PostCard = ({ post }: PostCardProp) => {
         </div>
       </div>
 
-      <Link to={`/posts/${post.$id}`} className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <p>{post.caption}</p>
         {post.Type === "image" ? (
           <ImageSlider images={post?.imageUrl} type={SliderType.Post} />
@@ -82,7 +82,7 @@ const PostCard = ({ post }: PostCardProp) => {
             Your browser does not support the video tag.
           </video>
         )}
-      </Link>
+      </div>
       <PostStats post={post} userId={user.id} />
     </Card>
   );

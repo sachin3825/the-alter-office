@@ -96,37 +96,42 @@ const PreviewPost = () => {
     !caption && images.length === 0 && !video && !cameraCapture;
 
   return (
-    <div className="p-5 space-y-4">
-      <h1 className="text-2xl font-semibold">Preview Post</h1>
+    <div className="p-5 space-y-4 max-w-screen-lg mx-auto flex flex-col h-screen justify-between">
+      <div className=" space-y-4 flex flex-col">
+        <h1 className="text-2xl font-semibold">Preview Post</h1>
 
-      <p className="text-lg font-medium">{caption}</p>
+        <p className="text-lg font-medium">{caption}</p>
 
-      {/* Image slider */}
-      {images.length > 0 && (
-        <ImageSlider
-          images={images}
-          onDelete={handleDeleteImage}
-          type={SliderType.Preview}
-        />
-      )}
+        {/* Image slider */}
+        {images.length > 0 && (
+          <ImageSlider
+            images={images}
+            onDelete={handleDeleteImage}
+            type={SliderType.Preview}
+          />
+        )}
 
-      {/* Video */}
-      {video && (
-        <video
-          controls
-          src={URL.createObjectURL(video)}
-          className="w-full rounded-md"
-        />
-      )}
+        {/* Video */}
+        {video && (
+          <video
+            controls
+            src={URL.createObjectURL(video)}
+            className="w-full rounded-md"
+          />
+        )}
 
-      {/* Captured Image */}
-      {cameraCapture && (
-        <img src={cameraCapture} alt="Captured" className="w-full rounded-md" />
-      )}
-
+        {/* Captured Image */}
+        {cameraCapture && (
+          <img
+            src={cameraCapture}
+            alt="Captured"
+            className="w-full rounded-md"
+          />
+        )}
+      </div>
       <Button
         onClick={handleCreatePost}
-        className="w-full"
+        className="rounded-full w-max self-center px-20"
         disabled={isCreatePostDisabled}
       >
         {isLoadingCreate ? "loading ..." : "Create Post"}
