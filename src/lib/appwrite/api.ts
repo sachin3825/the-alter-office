@@ -15,8 +15,8 @@ export const loginWithGoogle = async () => {
     // Initiate Google OAuth2 session
     await account.createOAuth2Session(
       OAuthProvider.Google,
-      "https://thealterofiiceassignment.netlify.app/",
-      "https://thealterofiiceassignment.netlify.app/"
+      "http://localhost:5173/",
+      "http://localhost:5173/"
     );
   } catch (error) {
     console.error("Error logging in with Google:", error);

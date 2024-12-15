@@ -10,7 +10,7 @@ const Signup = () => {
         <h1 className="text-2xl">Vibesnap</h1>
       </div>
       <p>Moments That Matter, Shared Forever.</p>
-      <Button onClick={loginWithGoogle}>
+      <Button onClick={loginWithGoogle} className="bg-black text-white">
         <FaGoogle />
         Continue with Google
       </Button>

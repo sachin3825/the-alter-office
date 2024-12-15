@@ -46,7 +46,7 @@ const Home = () => {
       )}
 
       <Button
-        className="fixed bottom-5 right-5 rounded-full h-10 w-10 z-10"
+        className="fixed bottom-5 right-5 rounded-full h-10 w-10 z-10 "
         onClick={() => navigate("/create-post")}
       >
         <IoMdAdd color="white" size={35} />
